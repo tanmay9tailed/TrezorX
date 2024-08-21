@@ -3,44 +3,13 @@ import { motion } from "framer-motion";
 import { generateMnemonic, mnemonicToSeedSync } from "bip39";
 import { useRouter } from "next/navigation";
 
-// Generate mnemonic and set phrases when createOrImport is "create"
-  // useEffect(() => {
-  //   if (createOrImport === "create") {
-  //     const mnemonic = generateMnemonic();
-  //     setPhrases(mnemonic.split(" "));
-  //     const seed = mnemonicToSeedSync(mnemonic);
-  //     console.log("Generated Mnemonic:", mnemonic);
-  //     console.log(seed);
-  //     let path = `m/44'/${selectCurrency}'/${sol}'/0'`;
-  //     if(selectCurrency === "501") path = `m/44'/${selectCurrency}'/${sol}'/0'`;
-  //     else if(selectCurrency === "60") path = `m/44'/${selectCurrency}'/${eth}'/0'`;
-  //     else if(selectCurrency === "0") path = `m/44'/${selectCurrency}'/${bit}'/0'`;
-  //     const derivedSeed = derivePath(path, seed.toString("hex"));
-  //     let privateKeyEncoded;
-  //     let publicKeyEncoded;
-  //     if (selectCurrency === "501") {
-  //       // Solana
-  //       const { secretKey } = nacl.sign.keyPair.fromSeed(derivedSeed);
-  //       const keypair = Keypair.fromSecretKey(secretKey);
+// Define the prop types
+interface MnemonicProps {
+  selectCurrency: string;
+  createOrImport: "create" | "import";
+}
 
-  //       privateKeyEncoded = bs58.encode(secretKey);
-  //       publicKeyEncoded = keypair.publicKey.toBase58();
-  //     } else if (selectCurrency === "60") {
-  //       // Ethereum
-  //       const privateKey = Buffer.from(derivedSeed).toString("hex");
-  //       privateKeyEncoded = privateKey;
-
-  //       const wallet = new ethers.Wallet(privateKey);
-  //       publicKeyEncoded = wallet.address;
-  //     }
-  //     const secret = nacl.sign.keyPair.fromSeed(derivedSeed).secretKey;
-  //     console.log(Keypair.fromSecretKey(secret).publicKey.toBase58());
-
-  //   }
-  // }, [createOrImport]);
-
-
-const Mnemonic = ({ selectCurrency, createOrImport }) => {
+const Mnemonic: React.FC<MnemonicProps> = ({ selectCurrency, createOrImport }) => {
   const router = useRouter();
   const [isCopied, setIsCopied] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
@@ -56,11 +25,11 @@ const Mnemonic = ({ selectCurrency, createOrImport }) => {
   const handleCopy = () => {
     navigator.clipboard.writeText(mnemonic).then(() => {
       setIsCopied(true);
-      setTimeout(() => setIsCopied(false), 2000); // Reset after 2 seconds
+      setTimeout(() => setIsCopied(false), 2000);
     });
   };
 
-  const handleInputChange = (index, value) => {
+  const handleInputChange = (index: number, value: string) => {
     const mnemonicArray = mnemonic.split(" ");
     mnemonicArray[index] = value;
     setMnemonic(mnemonicArray.join(" "));
@@ -80,17 +49,16 @@ const Mnemonic = ({ selectCurrency, createOrImport }) => {
     ? Array(12).fill("").map((_, index) => mnemonic.split(" ")[index] || "")
     : mnemonic.split(" ");
 
-    const handleNext = () => {
-      try {
-        const seed = mnemonicToSeedSync(mnemonic);
-        localStorage.setItem("seed", seed.toString("hex"));
-        localStorage.setItem("Currency", selectCurrency);
-        router.push("/profile");
-      } catch (error) {
-        console.error("Error generating seed from mnemonic:", error);
-      }
-    };
-    
+  const handleNext = () => {
+    try {
+      const seed = mnemonicToSeedSync(mnemonic);
+      localStorage.setItem("seed", seed.toString("hex"));
+      localStorage.setItem("Currency", selectCurrency);
+      router.push("/profile");
+    } catch (error) {
+      console.error("Error generating seed from mnemonic:", error);
+    }
+  };
 
   return (
     <>
