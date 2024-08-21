@@ -36,64 +36,74 @@ const Page = () => {
   const [currency, setCurrency] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showPrivateKeyIndex, setShowPrivateKeyIndex] = useState<number | null>(null);
-  const [wallets, setWallets] = useState<CustomWallet[]>(() => {
-    const storedWallets = localStorage.getItem("wallets");
-    return storedWallets ? JSON.parse(storedWallets) : [];
-  });
-
-  const curr = localStorage.getItem("Currency");
-  const hexSeed = localStorage.getItem("seed");
+  const [wallets, setWallets] = useState<CustomWallet[]>([]);
+  const [curr, setCurr] = useState<string | null>(null);
 
   useEffect(() => {
-    if (curr === "501") {
-      setCurrency("Solana");
-    } else if (curr === "60") {
-      setCurrency("Ethereum");
-    } else if (curr === "0") {
-      setCurrency("Bitcoin");
+    const storedWallets = localStorage.getItem("wallets");
+    if (storedWallets) {
+      setWallets(JSON.parse(storedWallets));
     }
-  }, [curr]);
+    
+    const currency = localStorage.getItem("Currency");
+    if (currency === "501") {
+      setCurrency("Solana");
+      setCurr("501");
+    } else if (currency === "60") {
+      setCurrency("Ethereum");
+      setCurr("60");
+    } else if (currency === "0") {
+      setCurrency("Bitcoin");
+      setCurr("0");
+    }
+  }, []);
 
   const handleAddWallet = () => {
+    if (!curr) {
+      console.error("Currency is not set");
+      return;
+    }
+
+    const hexSeed = localStorage.getItem("seed");
     if (!hexSeed) {
       console.error("Seed is missing or invalid");
       return;
     }
-  
+
     const seed = Buffer.from(hexSeed, "hex");
     const path = `m/44'/${curr}'/${currentIndex}'/0'`;
-  
+
     // SOLANA
     if (curr === "501") {
       const derivedSeed = derivePath(path, seed.toString("hex")).key;
       const secret = nacl.sign.keyPair.fromSeed(derivedSeed).secretKey;
       const keypair = Keypair.fromSecretKey(secret);
-      setWallets([
-        ...wallets,
+      setWallets((prevWallets) => [
+        ...prevWallets,
         {
           publicKey: keypair.publicKey.toBase58(),
           privateKey: Buffer.from(secret).toString("hex"),
         },
       ]);
-      setCurrentIndex(currentIndex + 1);
+      setCurrentIndex((prevIndex) => prevIndex + 1);
     }
-  
+
     // ETHEREUM
     else if (curr === "60") {
       const hdNode = HDNodeWallet.fromSeed(seed);
       const child = hdNode.derivePath(path);
       const privateKey = child.privateKey;
       const wallet = new EthersWallet(privateKey);
-      setCurrentIndex(currentIndex + 1);
-      setWallets([
-        ...wallets,
+      setCurrentIndex((prevIndex) => prevIndex + 1);
+      setWallets((prevWallets) => [
+        ...prevWallets,
         {
           publicKey: wallet.address,
           privateKey: privateKey,
         },
       ]);
     }
-  
+
     // BITCOIN
     else if (curr === "0") {
       const root = hdkey.fromMasterSeed(seed);
@@ -101,26 +111,27 @@ const Page = () => {
       const step1 = addrnode._publicKey;
       const step2 = createHash("sha256").update(step1).digest();
       const step3 = createHash("rmd160").update(step2).digest();
-  
-      var step4 = Buffer.allocUnsafe(21);
+
+      const step4 = Buffer.allocUnsafe(21);
       step4.writeUInt8(0x00, 0);
-      step3.copy(step4, 1); // step4 now holds the extended RIPMD-160 result
+      step3.copy(step4, 1);
       const address = bs58check.encode(step4);
-  
-      setWallets([
-        ...wallets,
+
+      setWallets((prevWallets) => [
+        ...prevWallets,
         {
           publicKey: address!,
           privateKey: addrnode.privateKey.toString("hex"),
         },
       ]);
-      setCurrentIndex(currentIndex + 1);
+      setCurrentIndex((prevIndex) => prevIndex + 1);
     }
   };
-  
 
   useEffect(() => {
-    localStorage.setItem("wallets", JSON.stringify(wallets));
+    if (typeof window !== "undefined") {
+      localStorage.setItem("wallets", JSON.stringify(wallets));
+    }
   }, [wallets]);
 
   const handleClearWallet = () => {

@@ -1,15 +1,9 @@
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { generateMnemonic, mnemonicToSeedSync } from "bip39";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { generateMnemonic, mnemonicToSeedSync } from "bip39";
+import { motion } from "framer-motion";
 
-// Define the prop types
-interface MnemonicProps {
-  selectCurrency: string;
-  createOrImport: "create" | "import";
-}
-
-const Mnemonic: React.FC<MnemonicProps> = ({ selectCurrency, createOrImport }) => {
+const Mnemonic = ({ selectCurrency, createOrImport }) => {
   const router = useRouter();
   const [isCopied, setIsCopied] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
@@ -25,11 +19,11 @@ const Mnemonic: React.FC<MnemonicProps> = ({ selectCurrency, createOrImport }) =
   const handleCopy = () => {
     navigator.clipboard.writeText(mnemonic).then(() => {
       setIsCopied(true);
-      setTimeout(() => setIsCopied(false), 2000);
+      setTimeout(() => setIsCopied(false), 2000); // Reset after 2 seconds
     });
   };
 
-  const handleInputChange = (index: number, value: string) => {
+  const handleInputChange = (index, value) => {
     const mnemonicArray = mnemonic.split(" ");
     mnemonicArray[index] = value;
     setMnemonic(mnemonicArray.join(" "));
@@ -50,13 +44,15 @@ const Mnemonic: React.FC<MnemonicProps> = ({ selectCurrency, createOrImport }) =
     : mnemonic.split(" ");
 
   const handleNext = () => {
-    try {
-      const seed = mnemonicToSeedSync(mnemonic);
-      localStorage.setItem("seed", seed.toString("hex"));
-      localStorage.setItem("Currency", selectCurrency);
-      router.push("/profile");
-    } catch (error) {
-      console.error("Error generating seed from mnemonic:", error);
+    if (typeof window !== "undefined") { // Check if window is defined
+      try {
+        const seed = mnemonicToSeedSync(mnemonic);
+        localStorage.setItem("seed", seed.toString("hex"));
+        localStorage.setItem("Currency", selectCurrency);
+        router.push("/profile");
+      } catch (error) {
+        console.error("Error generating seed from mnemonic:", error);
+      }
     }
   };
 
@@ -164,8 +160,8 @@ const Mnemonic: React.FC<MnemonicProps> = ({ selectCurrency, createOrImport }) =
             }}
             disabled={createOrImport === "import" ? !isAllFieldsFilled() : !isChecked}
             className={`mt-6 py-2 px-6 rounded-lg focus:outline-none transition duration-150 text-white ${
-              createOrImport === "import" 
-                ? isAllFieldsFilled() 
+              createOrImport === "import"
+                ? isAllFieldsFilled()
                   ? "bg-gray-500 dark:bg-gray-700 hover:bg-gray-600 dark:hover:bg-gray-600"
                   : "bg-gray-400 dark:bg-gray-600 cursor-not-allowed"
                 : isChecked
