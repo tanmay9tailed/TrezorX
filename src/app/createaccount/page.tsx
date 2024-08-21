@@ -6,10 +6,13 @@ import Image from "next/image";
 import { useState } from "react";
 import Mnemonic from "@/components/Mnemonic";
 
+// Define types for createOrImport and selectCurrency
+type CreateOrImportType = "create" | "import";
+type SelectCurrencyType = "501" | "60" | "0" | ""; // Add more as needed
+
 const Page = () => {
-  const [createOrImport, setCreateOrImport] = useState("");
-  const [selectCurrency, setSelectCurrency] = useState("");
-  console.log(createOrImport)
+  const [createOrImport, setCreateOrImport] = useState<CreateOrImportType | "">("");
+  const [selectCurrency, setSelectCurrency] = useState<SelectCurrencyType>("");
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -28,7 +31,7 @@ const Page = () => {
 
   return (
     <>
-      {createOrImport==="" && (
+      {createOrImport === "" && (
         <motion.div
           initial="hidden"
           animate="visible"
@@ -68,7 +71,7 @@ const Page = () => {
           </motion.div>
         </motion.div>
       )}
-      {createOrImport!=="" && selectCurrency==="" && (
+      {createOrImport !== "" && selectCurrency === "" && (
         <motion.div
           initial="hidden"
           animate="visible"
@@ -95,22 +98,6 @@ const Page = () => {
                 <span className="ml-4">Solana</span>
               </Button>
             </motion.div>
-            {/* <motion.div variants={itemVariants} className="w-full">
-              <Button
-                size={"lg"}
-                onClick={() => setSelectCurrency("polygon")}
-                className="w-full py-3 bg-gray-700 text-white rounded-lg font-semibold hover:bg-gray-800 transition duration-300 flex justify-start items-center space-x-4"
-              >
-                <Image
-                  src="https://assets.coingecko.com/coins/images/4713/large/polygon.png"
-                  width={40}
-                  height={40}
-                  className="object-cover rounded-full"
-                  alt="Polygon Logo"
-                />
-                <span className="ml-4">Polygon</span>
-              </Button>
-            </motion.div> */}
             <motion.div variants={itemVariants} className="w-full">
               <Button
                 size={"lg"}
@@ -138,7 +125,7 @@ const Page = () => {
                   width={40}
                   height={40}
                   className="object-cover rounded-full"
-                  alt="Ethereum Logo"
+                  alt="Bitcoin Logo"
                 />
                 <span className="ml-4">Bitcoin</span>
               </Button>
@@ -146,7 +133,7 @@ const Page = () => {
           </div>
         </motion.div>
       )}
-      <Mnemonic selectCurrency={selectCurrency} createOrImport={createOrImport} />
+      <Mnemonic selectCurrency={selectCurrency} createOrImport={createOrImport as CreateOrImportType} />
     </>
   );
 };
