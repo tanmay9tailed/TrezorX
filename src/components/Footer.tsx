@@ -86,9 +86,8 @@ export default function Footer() {
     },
   ];
   return (
-    <div className="flex items-center justify-center w-full fixed bottom-10">
+      <div className="sm:flex sm:items-center sm:justify-center w-full fixed bottom-6 left-4">
       <FloatingDock
-        mobileClassName="translate-y-20" // only for demo, remove for production
         items={links}
       />
     </div>

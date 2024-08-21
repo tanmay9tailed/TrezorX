@@ -48,7 +48,7 @@ const Mnemonic: React.FC<MnemonicProps> = ({ selectCurrency, createOrImport }) =
     : mnemonic.split(" ");
 
   const handleNext = () => {
-    if (typeof window !== "undefined") { // Check if window is defined
+    if (typeof window !== "undefined") { 
       try {
         const seed = mnemonicToSeedSync(mnemonic);
         localStorage.setItem("seed", seed.toString("hex"));
@@ -70,7 +70,7 @@ const Mnemonic: React.FC<MnemonicProps> = ({ selectCurrency, createOrImport }) =
             visible: { transition: { staggerChildren: 0.2 } },
             hidden: {},
           }}
-          className="h-full flex flex-col items-center justify-center"
+          className="h-full flex flex-col items-center justify-center pt-20 md:pt-52 px-4 sm:px-0 pb-24"
         >
           <motion.div
             variants={{
@@ -107,7 +107,7 @@ const Mnemonic: React.FC<MnemonicProps> = ({ selectCurrency, createOrImport }) =
               duration: 0.8,
               ease: "easeInOut",
             }}
-            className="bg-gray-300 dark:bg-gray-800 py-8 px-12 rounded-lg shadow-lg grid grid-cols-3 gap-10 cursor-pointer relative"
+            className="bg-gray-300 dark:bg-gray-800 py-4 px-6 sm:py-8 sm:px-12 rounded-lg shadow-lg grid grid-cols-3 gap-10 cursor-pointer relative"
             onClick={checkHandleCopy}
           >
             {mnemonicPhrases.map((phrase, index) => (
@@ -118,7 +118,7 @@ const Mnemonic: React.FC<MnemonicProps> = ({ selectCurrency, createOrImport }) =
                   value={phrase}
                   disabled={createOrImport === "create"}
                   onChange={(e) => handleInputChange(index, e.target.value)}
-                  className="bg-transparent border-b border-gray-400 focus:outline-none"
+                  className="w-full bg-transparent border-b border-gray-400 focus:outline-none"
                   required
                 />
               </div>

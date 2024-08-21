@@ -7,10 +7,10 @@ const Navbar = () => {
   
   const router = useRouter();
   return (
-    <div className="h-[10vh] w-full flex flex-row justify-between items-start p-5 pr-20">
-      <div className="w-60 bg-transparent flex flex-col items-center justify-center overflow-hidden rounded-md relative">
+    <div className="h-[10vh] w-full flex flex-row justify-between items-start py-5 pr-4 sm:pr-20">
+      <div className="w-40 sm:w-60 bg-transparent flex flex-col items-center justify-center overflow-hidden rounded-md relative">
         <h1 className="text-lg font-bold text-center relative z-20 cursor-pointer" onClick={() => {router.push("/")}}>TrezorX</h1>
-        <div className="w-2/3 h-14 relative">
+        <div className="w-4/5 sm:w-2/3 h-14 relative">
           {/* Gradients */}
           <div className="absolute inset-x-4 top-0 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-[2px] w-full blur-sm" />
           <div className="absolute inset-x-4 top-0 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-px w-full" />
@@ -22,7 +22,7 @@ const Navbar = () => {
             background="transparent"
             minSize={0.4}
             maxSize={1}
-            particleDensity={1200}
+            particleDensity={3000}
             className="w-full h-full"
             particleColor="#FFFFFF"
           />

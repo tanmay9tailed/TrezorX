@@ -1,5 +1,5 @@
 "use client";
-
+import { useMediaQuery } from "react-responsive";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
@@ -13,6 +13,9 @@ type SelectCurrencyType = "501" | "60" | "0" | ""; // Add more as needed
 const Page = () => {
   const [createOrImport, setCreateOrImport] = useState<CreateOrImportType | "">("");
   const [selectCurrency, setSelectCurrency] = useState<SelectCurrencyType>("");
+  const isMobile = useMediaQuery({
+    query: "(max-device-width: 500px)",
+  });
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -36,13 +39,13 @@ const Page = () => {
           initial="hidden"
           animate="visible"
           variants={containerVariants}
-          className="h-full flex flex-col justify-center items-center space-y-32"
+          className="h-full flex flex-col justify-center items-center space-y-20 sm:space-y-32"
         >
           <motion.div variants={itemVariants} className="flex flex-col items-center">
             <Image
               src="/TrezorX.jpeg"
-              width={200}
-              height={200}
+              width={isMobile ? 100 : 200}
+              height={isMobile ? 100 : 200}
               className="object-cover rounded-full mb-6"
               alt="TrezorX Logo"
             />
@@ -51,7 +54,10 @@ const Page = () => {
               <p className="text-lg mt-4 text-gray-400">Let&apos;s get started</p>
             </div>
           </motion.div>
-          <motion.div variants={itemVariants} className="mt-10 space-y-6 w-full flex flex-col items-center">
+          <motion.div
+            variants={itemVariants}
+            className="mt-10 space-y-3 sm:space-y-6 w-full flex flex-col items-center"
+          >
             <Button
               onClick={() => {
                 setCreateOrImport("create");
@@ -81,7 +87,7 @@ const Page = () => {
           <motion.h1 variants={itemVariants} className="text-4xl font-semibold mb-12">
             Select Network
           </motion.h1>
-          <div className="space-y-6 w-full max-w-md flex flex-col items-center">
+          <div className="space-y-3 sm:space-y-6 w-full max-w-md flex flex-col items-center px-10 sm:px-0">
             <motion.div variants={itemVariants} className="w-full">
               <Button
                 size={"lg"}

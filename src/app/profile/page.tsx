@@ -146,7 +146,7 @@ const Page = () => {
   return (
     <>
       <motion.div
-        className="w-full min-h-full px-32 pb-[10vh]"
+        className="w-full min-h-full px-6 sm:px-32 pb-[10vh]"
         initial="hidden"
         animate="visible"
         variants={{
@@ -155,22 +155,21 @@ const Page = () => {
         }}
       >
         <motion.div
-          className="w-full flex justify-between items-center pt-20"
+          className="w-full flex justify-between items-center pt-10 sm:pt-20"
           variants={{
             hidden: { opacity: 0, y: 40 },
             visible: { opacity: 1, y: 0 },
           }}
           transition={{ duration: 0.8, ease: "easeInOut" }}
         >
-          <h1 className="text-5xl font-extrabold">Your {currency} Wallet</h1>
-          <div className="space-x-5">
-            <Button variant={"default"} size={"lg"} className="py-4" onClick={handleAddWallet}>
+          <h1 className="text-3xl sm:text-5xl font-extrabold">{currency} Wallet</h1>
+          <div className="space-y-2 sm:space-x-5 flex flex-col sm:flex-row items-end">
+            <Button variant={"default"} size={"lg"} className="py-2 sm:py-4" onClick={handleAddWallet}>
               Add Wallet
             </Button>
-
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <Button variant={"destructive"} size={"lg"} className="py-4">
+                <Button variant={"destructive"} size={"lg"} className="py-2 sm:py-4">
                   Clear Wallet
                 </Button>
               </AlertDialogTrigger>

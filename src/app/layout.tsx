@@ -34,7 +34,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={cn("min-h-screen bg-slate-50 dark:bg-zinc-950 font-sans antialiased m-0 p-0", fontSans.variable)}
+        className={cn("min-h-screen bg-slate-50 dark:bg-zinc-950 font-sans antialiased m-0 p-0 relative", fontSans.variable)}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <Navbar />
