@@ -19,10 +19,9 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useRouter } from "next/navigation";
-import * as bip39 from "bip39";
-import hdkey from "hdkey";
-import createHash from "create-hash";
-import bs58check from "bs58check";
+var hdkey = require('hdkey');
+var createHash = require('create-hash');
+var bs58check = require('bs58check');
 import { motion } from "framer-motion";
 
 // Define the CustomWallet interface
