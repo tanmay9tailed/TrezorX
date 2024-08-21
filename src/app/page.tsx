@@ -9,11 +9,11 @@ import { useRouter } from "next/navigation";
 
 export default function Home() {
   const { theme } = useTheme();
-  const [t, setT] = useState("dark"); // Default value is 'dark'
+  const [t, setT] = useState(theme); 
   const router = useRouter();
 
   useEffect(() => {
-    setT(theme ?? "dark");
+    setT(theme);
   }, [theme]);
 
   return (
