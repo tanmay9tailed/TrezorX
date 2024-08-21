@@ -2,8 +2,12 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { generateMnemonic, mnemonicToSeedSync } from "bip39";
 import { motion } from "framer-motion";
+interface MnemonicProps {
+  selectCurrency: string;
+  createOrImport: string;
+}
 
-const Mnemonic = ({ selectCurrency, createOrImport }) => {
+const Mnemonic: React.FC<MnemonicProps> = ({ selectCurrency, createOrImport }) => {
   const router = useRouter();
   const [isCopied, setIsCopied] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
@@ -23,7 +27,7 @@ const Mnemonic = ({ selectCurrency, createOrImport }) => {
     });
   };
 
-  const handleInputChange = (index, value) => {
+  const handleInputChange = (index: number, value: string) => {
     const mnemonicArray = mnemonic.split(" ");
     mnemonicArray[index] = value;
     setMnemonic(mnemonicArray.join(" "));
