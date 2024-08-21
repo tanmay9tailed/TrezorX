@@ -55,9 +55,14 @@ const Page = () => {
   }, [curr]);
 
   const handleAddWallet = () => {
+    if (!hexSeed) {
+      console.error("Seed is missing or invalid");
+      return;
+    }
+  
     const seed = Buffer.from(hexSeed, "hex");
     const path = `m/44'/${curr}'/${currentIndex}'/0'`;
-
+  
     // SOLANA
     if (curr === "501") {
       const derivedSeed = derivePath(path, seed.toString("hex")).key;
@@ -72,7 +77,7 @@ const Page = () => {
       ]);
       setCurrentIndex(currentIndex + 1);
     }
-
+  
     // ETHEREUM
     else if (curr === "60") {
       const hdNode = HDNodeWallet.fromSeed(seed);
@@ -88,7 +93,7 @@ const Page = () => {
         },
       ]);
     }
-
+  
     // BITCOIN
     else if (curr === "0") {
       const root = hdkey.fromMasterSeed(seed);
@@ -96,12 +101,12 @@ const Page = () => {
       const step1 = addrnode._publicKey;
       const step2 = createHash("sha256").update(step1).digest();
       const step3 = createHash("rmd160").update(step2).digest();
-
+  
       var step4 = Buffer.allocUnsafe(21);
       step4.writeUInt8(0x00, 0);
       step3.copy(step4, 1); // step4 now holds the extended RIPMD-160 result
       const address = bs58check.encode(step4);
-
+  
       setWallets([
         ...wallets,
         {
@@ -112,6 +117,7 @@ const Page = () => {
       setCurrentIndex(currentIndex + 1);
     }
   };
+  
 
   useEffect(() => {
     localStorage.setItem("wallets", JSON.stringify(wallets));
