@@ -19,9 +19,10 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useRouter } from "next/navigation";
-var hdkey = require('hdkey');
-var createHash = require('create-hash');
-var bs58check = require('bs58check');
+var hdkey = require("hdkey");
+var createHash = require("create-hash");
+var bs58check = require("bs58check");
+import bs58 from "bs58";
 import { motion } from "framer-motion";
 
 // Define the CustomWallet interface
@@ -44,7 +45,7 @@ const Page = () => {
     if (storedWallets) {
       setWallets(JSON.parse(storedWallets));
     }
-    
+
     const currency = localStorage.getItem("Currency");
     if (currency === "501") {
       setCurrency("Solana");
@@ -82,7 +83,7 @@ const Page = () => {
         ...prevWallets,
         {
           publicKey: keypair.publicKey.toBase58(),
-          privateKey: Buffer.from(secret).toString("hex"),
+          privateKey: bs58.encode(secret),
         },
       ]);
       setCurrentIndex((prevIndex) => prevIndex + 1);

@@ -18,11 +18,6 @@ export default function Footer() {
       href: "/createaccount",
     },
     {
-      title: "Profile",
-      icon: <IconUser className="h-full w-full text-neutral-500 dark:text-neutral-300" />,
-      href: "/profile",
-    },
-    {
       title: "Something new coming...",
       icon: <Image src="/Designer (1).jpeg" width={20} height={20} alt="Portfolio" />,
       href: "#",
