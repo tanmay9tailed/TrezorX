@@ -1,16 +1,33 @@
 "use client";
-
 import { motion } from "framer-motion";
 import { Vortex } from "@/components/ui/vortex";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { addFromLocalStorage, AccountsState } from "@/lib/features/slice/slice";
+import { Cover } from "@/components/ui/cover";
 
 export default function Home() {
+  const accounts = useAppSelector((state) => state.accounts);
+  const dispatch = useAppDispatch();
   const { theme } = useTheme();
-  const [t, setT] = useState(theme); 
+  const [t, setT] = useState(theme);
   const router = useRouter();
+
+  useEffect(() => {
+    if (accounts?.default_account !== -1) {
+      router.push("/profile");
+      return;
+    }
+
+    const localData = localStorage.getItem("accounts");
+    if (localData) {
+      const localAccounts = JSON.parse(localData) as AccountsState;
+      dispatch(addFromLocalStorage(localAccounts));
+    }
+  }, [dispatch, accounts, router]);
 
   useEffect(() => {
     setT(theme);
@@ -46,7 +63,7 @@ export default function Home() {
                 : "bg-gradient-to-b from-neutral-800 via-white to-white"
             } flex items-center gap-2 md:gap-8`}
           >
-            <span>Trezor-X</span>
+            <Cover>Trezor-X</Cover>
           </motion.h1>
 
           <motion.p
@@ -77,7 +94,13 @@ export default function Home() {
               ease: "easeInOut",
             }}
           >
-            <Button variant="default" className="mt-5" onClick={() => router.push("/createaccount")}>Get Started</Button>
+            <Button
+              variant="default"
+              className="mt-5"
+              onClick={() => router.push("/createaccount")}
+            >
+              Get Started
+            </Button>
           </motion.div>
         </motion.div>
       </Vortex>

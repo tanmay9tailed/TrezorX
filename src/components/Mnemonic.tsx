@@ -2,12 +2,16 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { generateMnemonic, mnemonicToSeedSync } from "bip39";
 import { motion } from "framer-motion";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { addAccount, setDefaultAccount } from "@/lib/features/slice/slice";
 interface MnemonicProps {
   selectCurrency: string;
   createOrImport: string;
 }
 
 const Mnemonic: React.FC<MnemonicProps> = ({ selectCurrency, createOrImport }) => {
+  const dispatch = useAppDispatch();
+  const account = useAppSelector((state) => state.accounts.details);
   const router = useRouter();
   const [isCopied, setIsCopied] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
@@ -51,8 +55,20 @@ const Mnemonic: React.FC<MnemonicProps> = ({ selectCurrency, createOrImport }) =
     if (typeof window !== "undefined") { 
       try {
         const seed = mnemonicToSeedSync(mnemonic);
-        localStorage.setItem("seed", seed.toString("hex"));
-        localStorage.setItem("Currency", selectCurrency);
+        // localStorage.setItem("seed", seed.toString("hex"));
+        // localStorage.setItem("Currency", selectCurrency);
+
+        const newAccount = {
+          account_name: `Account ${account.length + 1}`,
+          seed: seed.toString("hex"),
+          currency: selectCurrency,
+          wallets: [],
+          default_wallet: -1,
+        };
+
+        dispatch(addAccount(newAccount));
+        dispatch(setDefaultAccount(account.length));
+        console.log(account)
         router.push("/profile");
       } catch (error) {
         console.error("Error generating seed from mnemonic:", error);
