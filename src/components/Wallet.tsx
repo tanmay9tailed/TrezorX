@@ -18,6 +18,7 @@ import {
 import { ArrowRightLeft, DollarSign, Plus, Send } from "lucide-react";
 import axios from "axios";
 import { ethers } from "ethers";
+import ReactLoading from 'react-loading'
 
 const containerVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -58,58 +59,66 @@ const Wallet: React.FC = () => {
   ];
 
   useEffect(() => {
-    const getEthPriceInUSD = async () => {
-      const response = await axios.get(
-        "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd"
-      );
-      return response.data.ethereum.usd;
+    const getEthBalance = async () => {
+      try {
+        const response = await axios.post(
+          "https://eth-mainnet.g.alchemy.com/v2/djt3Hz2vuRd_sihRFtfXzdXWZjbciIJg",
+          {
+            jsonrpc: "2.0",
+            id: 1,
+            method: "eth_getBalance",
+            params: [walletDetails?.publicKey, "latest"],
+          }
+        );
+        const balanceInWei = response.data.result;
+        const balanceInEther = ethers.formatEther(balanceInWei);
+        setAmount(balanceInEther);
+  
+        // Fetch ETH to USD price
+        // const ethPriceResponse = await axios.get(
+        //   "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd"
+        // );
+        // const ethPriceInUSD = ethPriceResponse.data.ethereum.usd;
+        // setBalance((parseFloat(balanceInEther) * ethPriceInUSD).toFixed(2));
+      } catch (err) {
+        console.error("Error fetching Eth", err);
+      }
     };
   
-    const getSolPriceInUSD = async () => {
-      const response = await axios.get(
-        "https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd"
-      );
-      return response.data.solana.usd; 
+    const getSolBalance = async () => {
+      try {
+        const response = await axios.post(
+          "https://solana-mainnet.g.alchemy.com/v2/djt3Hz2vuRd_sihRFtfXzdXWZjbciIJg",
+          {
+            jsonrpc: "2.0",
+            id: 1,
+            method: "getBalance",
+            params: [walletDetails?.publicKey],
+          }
+        );
+        const balanceInLampports = response.data.result.value;
+        const balanceInSol = balanceInLampports / 1e9;
+        setAmount(balanceInSol.toString());
+  
+        // Fetch SOL to USD price
+        // const solPriceResponse = await axios.get(
+        //   "https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd"
+        // );
+        // const solPriceInUSD = solPriceResponse.data.solana.usd;
+        // const balanceInUSD = balanceInSol * solPriceInUSD;
+        // setBalance(balanceInUSD.toFixed(2));
+      } catch (err) {
+        console.error("Error fetching SOL", err);
+      }
     };
-    if (currency == "60") {
-      axios
-        .post("https://eth-mainnet.g.alchemy.com/v2/djt3Hz2vuRd_sihRFtfXzdXWZjbciIJg", {
-          jsonrpc: "2.0",
-          id: 1,
-          method: "eth_getBalance",
-          params: [walletDetails.publicKey, "latest"],
-        })
-        .then(async (response) => {
-          const balanceInWei = response.data.result;
-          const balanceInEther = ethers.formatEther(balanceInWei);
-          const ethPriceInUSD = await getEthPriceInUSD();
-          setAmount(balanceInEther);
-          setBalance((parseFloat(balanceInEther) * ethPriceInUSD).toFixed(2));
-        })
-        .catch((err) => {
-          console.error("Error fetching Eth", err);
-        });
+  
+    if (currency === "60") {
+      getEthBalance();
     } else {
-      axios
-        .post("https://solana-mainnet.g.alchemy.com/v2/djt3Hz2vuRd_sihRFtfXzdXWZjbciIJg", {
-          jsonrpc: "2.0",
-          id: 1,
-          method: "getBalance",
-          params: [walletDetails.publicKey],
-        })
-        .then(async (response) => {
-          const balanceInLampports = response.data.result.value; 
-          const balanceInSol = balanceInLampports / 1e9; 
-          const solPriceInUSD = await getSolPriceInUSD();
-          const balanceInUSD = balanceInSol * solPriceInUSD;
-          setAmount(balanceInSol.toString())
-          setBalance(balanceInUSD.toFixed(2)); 
-        })
-        .catch((err) => {
-          console.error("Error fetchting SOL", err);
-        });
+      getSolBalance();
     }
-  }, [walletDetails.publicKey, currency]);
+  }, [walletDetails?.publicKey, currency]);
+  
 
   return (
     <>
@@ -120,8 +129,8 @@ const Wallet: React.FC = () => {
           initial="hidden"
           animate="visible"
         >
-          <motion.h1 className="text-4xl font-bold mt-8 text-center" variants={itemVariants}>
-            ${balance}
+          <motion.h1 className="text-4xl font-bold mt-8 text-center flex justify-center items-center" variants={itemVariants}>
+            {balance==="1000"?<ReactLoading type={"spin"} color={"white"} height={'24px'} width={'24px'}/>:`$ ${balance}`}
           </motion.h1>
           <motion.p className="text-lg font-semibold text-green-400 mt-3 w-full text-center" variants={itemVariants}>
             +$00.00 <span className="ml-1 p-1 bg-green-200/20 rounded-lg">+00%</span>
@@ -147,7 +156,8 @@ const Wallet: React.FC = () => {
               Wallet {walletDetails.walletNo}
             </motion.p>
             <motion.p className="text-lg font-semibold" variants={itemVariants}>
-              No of {currency == "60"?"eths":"sols"} : {amount}
+              No of {currency == "60"?"eths":"sols"} : {amount === "10" ? <ReactLoading type={"spin"} color={"white"} height={'24px'} width={'24px'} /> : `${amount}`}
+
             </motion.p>
 
             <motion.p className="text-sm truncate" variants={itemVariants}>
