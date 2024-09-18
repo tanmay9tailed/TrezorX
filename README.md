@@ -1,10 +1,30 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+TrezorX
+TrezorX is a Web3 crypto management app designed for managing Solana and Ethereum accounts and wallets. With TrezorX, users can create multiple accounts, manage wallets within those accounts, view real-time cryptocurrency balances, and handle mnemonic-based wallet creation or imports.
 
-## Getting Started
+Live Demo
 
-First, run the development server:
+Features
+Multi-Account Support: Create and manage multiple Solana and Ethereum accounts.
+Wallet Management: Each account can hold multiple wallets. Users can create, delete, or import wallets as needed.
+Real-Time Balance Display: View live balances of SOL or ETH in each wallet, updated in real-time.
+Mnemonic & Seed Generation: Generate a new set of mnemonic phrases and create wallets from those phrases. Seed phrases are created for added security and account recovery.
+Wallet Import: Import wallets by providing an existing mnemonic you already hold, making it easy to restore or manage existing wallets.
+Future Features: Sending and receiving functionality for cryptocurrency transactions is planned in future updates.
+Getting Started
+To run this project locally, follow these steps:
 
-```bash
+1. Clone the repository:
+bash
+Copy code
+git clone https://github.com/yourusername/trezorx.git
+cd trezorx
+2. Install dependencies:
+bash
+Copy code
+npm install
+3. Run the development server:
+bash
+Copy code
 npm run dev
 # or
 yarn dev
@@ -12,26 +32,20 @@ yarn dev
 pnpm dev
 # or
 bun dev
-```
+Open http://localhost:3000 with your browser to see the app.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+How It Works
+Create Accounts: Start by creating either Solana or Ethereum accounts within TrezorX.
+Manage Wallets: After account creation, manage wallets within the account. You can have multiple wallets per account, each with its own unique address and balance.
+Live Balance Monitoring: View the current balance of SOL or ETH in each wallet, updated in real-time.
+Mnemonic & Wallet Creation: Generate a new mnemonic phrase to create wallets, ensuring security and recovery options through seed phrases.
+Import Existing Wallets: Import wallets easily by inputting an existing mnemonic phrase, restoring your accounts with ease.
+Manage Accounts and Wallets: Delete unnecessary accounts or wallets as needed for better management and organization.
+Learn More
+To learn more about the underlying technologies used in TrezorX, check out the following resources:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-"# TrezorX" 
+Next.js Documentation – Learn about the Next.js framework powering this app.
+Solana Docs – Explore how the Solana blockchain works.
+Ethereum Docs – Understand Ethereum blockchain functionalities.
+Deployment
+The app is deployed on Vercel. You can check the deployment documentation here.
