@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { FloatingDock } from "@/components/ui/floating-dock";
-import { IconBrandGithub, IconBrandInstagram, IconHome, IconUser, IconWallet } from "@tabler/icons-react";
+import { IconBrandGithub, IconBrandX, IconHome, IconWallet } from "@tabler/icons-react";
 import Image from "next/image";
 
 export default function Footer() {
@@ -34,10 +34,15 @@ export default function Footer() {
     },
 
     {
-      title: "Instagram",
-      icon: <IconBrandInstagram className="h-full w-full text-neutral-500 dark:text-neutral-300" />,
-      href: "https://www.instagram.com/__tanmayy.sahu__/profilecard/?igsh=MXZwaDh4Y2dmeHRt",
+      title: "Twitter",
+      icon: <IconBrandX className="h-full w-full text-neutral-500 dark:text-neutral-300" />,
+      href: "https://x.com/sahu069",
     },
+    // {
+    //   title: "Instagram",
+    //   icon: <IconBrandX className="h-full w-full text-neutral-500 dark:text-neutral-300" />,
+    //   href: "https://www.instagram.com/__tanmayy.sahu__/profilecard/?igsh=MXZwaDh4Y2dmeHRt",
+    // },
     {
       title: "GitHub",
       icon: <IconBrandGithub className="h-full w-full text-neutral-500 dark:text-neutral-300" />,

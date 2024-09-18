@@ -55,8 +55,26 @@ const accountsSlice = createSlice({
                 state.details[default_account].default_wallet = Math.max(0, state.details[default_account].default_wallet - 1);
             }
         },        
+        removeAccount(state, action: PayloadAction<number>) {
+            const accounts = state.details.length;
+            if(accounts!=1){
+                state.details.splice(action.payload, 1);
+                if(state.default_account == 0){ 
+                    state.default_account = 0;
+                    for(let i =0;i<state.details.length;i++){
+                        state.details[i].account_name = `Account ${i+1}`;
+                    }
+                }
+                else{ 
+                    state.default_account = action.payload-1;
+                    for(let i =0;i<state.details.length;i++){
+                        state.details[i].account_name = `Account ${i+1}`;
+                    }
+                }
+            }
+        },        
     },
 });
 
-export const { addFromLocalStorage, setDefaultWallet, setDefaultAccount, addAccount, addWalletToAccount, removeWallet } = accountsSlice.actions;
+export const { addFromLocalStorage, setDefaultWallet, setDefaultAccount, addAccount, addWalletToAccount, removeWallet, removeAccount } = accountsSlice.actions;
 export default accountsSlice.reducer;

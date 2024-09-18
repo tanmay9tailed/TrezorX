@@ -13,9 +13,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { FloatingNav } from "./floating-navbar";
-import { AccountsState, setDefaultWallet } from "@/lib/features/slice/slice";
+import { AccountsState, setDefaultWallet, removeAccount } from "@/lib/features/slice/slice";
 import Wallet from "./Wallet";
-import { useAppDispatch } from "@/lib/hooks";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 
 interface CustomWallet {
   walletNo: number;
@@ -43,15 +43,17 @@ const Profile: React.FC<ProfileProps> = ({
   accounts,
 }) => {
   const dispatch = useAppDispatch();
+  const currAcc = useAppSelector((state) => state.accounts.default_account);
+  const AccNos = useAppSelector((state) => state.accounts.details.length);
 
   const changeDefaultWallet = (walletNo: string) => {
-    const index = wallets.findIndex(
-      (wallet) => wallet.publicKey === walletNo
-    );
+    const index = wallets.findIndex((wallet) => wallet.publicKey === walletNo);
     dispatch(setDefaultWallet(index));
   };
 
-  
+  const handleRemoveAccount = () => {
+    dispatch(removeAccount(currAcc));
+  };
 
   return (
     <motion.div
@@ -105,6 +107,38 @@ const Profile: React.FC<ProfileProps> = ({
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
               </AlertDialogFooter>
             </AlertDialogContent>
+          </AlertDialog>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="destructive" size="default" className="py-2 sm:py-4">
+                Remove Account
+              </Button>
+            </AlertDialogTrigger>
+            {AccNos == 1 ? (
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>You need to have atleast one account</AlertDialogTitle>
+                  <AlertDialogDescription>Cannot remove all accounts</AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            ) : (
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete your account and remove your data from
+                    our servers.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleRemoveAccount}>Continue</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            )}
           </AlertDialog>
         </div>
       </motion.div>

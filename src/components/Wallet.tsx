@@ -39,7 +39,7 @@ const Wallet: React.FC = () => {
   const currency = accounts.details[defaultAcc].currency;
   const defaultWallet = accounts.details[defaultAcc].default_wallet;
   const walletDetails = accounts.details[defaultAcc].wallets[defaultWallet];
-  const [balance, setBalance] = useState("1000");
+  const [balance, setBalance] = useState("-1");
   const [amount, setAmount] = useState("10");
 
   const handleRemoveWallet = () => {
@@ -130,7 +130,7 @@ const Wallet: React.FC = () => {
           animate="visible"
         >
           <motion.h1 className="text-4xl font-bold mt-8 text-center flex justify-center items-center" variants={itemVariants}>
-            {balance==="1000"?<ReactLoading type={"spin"} color={"white"} height={'24px'} width={'24px'}/>:`$ ${balance}`}
+            {balance==="-1"?<ReactLoading type={"spin"} color={"grey"} height={'24px'} width={'24px'}/>:`$ ${balance}`}
           </motion.h1>
           <motion.p className="text-lg font-semibold text-green-400 mt-3 w-full text-center" variants={itemVariants}>
             +$00.00 <span className="ml-1 p-1 bg-green-200/20 rounded-lg">+00%</span>
@@ -182,7 +182,7 @@ const Wallet: React.FC = () => {
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button variant="destructive" size="default" className="py-2 sm:py-4">
-                  Remove
+                  Remove Wallet
                 </Button>
               </AlertDialogTrigger>
               <AlertDialogContent>

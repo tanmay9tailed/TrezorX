@@ -6,9 +6,8 @@ import Image from "next/image";
 import { useState } from "react";
 import Mnemonic from "@/components/Mnemonic";
 
-// Define types for createOrImport and selectCurrency
 type CreateOrImportType = "create" | "import";
-type SelectCurrencyType = "501" | "60" | "0" | ""; // Add more as needed
+type SelectCurrencyType = "501" | "60" | "0" | ""; 
 
 const Page = () => {
   const [createOrImport, setCreateOrImport] = useState<CreateOrImportType | "">("");
@@ -120,7 +119,7 @@ const Page = () => {
                 <span className="ml-4">Ethereum</span>
               </Button>
             </motion.div>
-            <motion.div variants={itemVariants} className="w-full">
+            {/* <motion.div variants={itemVariants} className="w-full">
               <Button
                 size={"lg"}
                 onClick={() => setSelectCurrency("0")}
@@ -135,7 +134,7 @@ const Page = () => {
                 />
                 <span className="ml-4">Bitcoin</span>
               </Button>
-            </motion.div>
+            </motion.div> */}
           </div>
         </motion.div>
       )}
